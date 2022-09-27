@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="sucursales", indexes={@ORM\Index(name="fk_sucursal_checador", columns={"checador_id"})})
  * @ORM\Entity
  */
-class Sucursales
+class Sucursale
 {
     /**
      * @var int
@@ -43,9 +43,9 @@ class Sucursales
     private $descripcion;
 
     /**
-     * @var \Checadores
+     * @var \Checador
      *
-     * @ORM\ManyToOne(targetEntity="Checadores")
+     * @ORM\ManyToOne(targetEntity="Checador")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="checador_id", referencedColumnName="id")
      * })
@@ -93,12 +93,12 @@ class Sucursales
         return $this;
     }
 
-    public function getChecador(): ?Checadores
+    public function getChecador(): ?Checador
     {
         return $this->checador;
     }
 
-    public function setChecador(?Checadores $checador): self
+    public function setChecador(?Checador $checador): self
     {
         $this->checador = $checador;
 

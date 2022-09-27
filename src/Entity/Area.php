@@ -7,12 +7,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * Areas
+ * Area
  *
  * @ORM\Table(name="areas")
  * @ORM\Entity
  */
-class Area
+// Se agrega implements \JsonSerializable y el metodo public function jsonSerialize() para ver la response
+class Area implements \JsonSerializable
 {
     /**
      * @var int
@@ -78,6 +79,15 @@ class Area
 
     public function getPuestos(): Collection {
         return $this->puestos;
+    }
+
+    //Para serializar el objeto en json
+    public function jsonSerialize(): array{
+        return[
+            'id' => $this->id,
+            'nombre' => $this->nombre,
+            'descripcion' => $this->descripcion,
+        ];
     }
 
 }

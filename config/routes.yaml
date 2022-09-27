@@ -25,7 +25,8 @@ empleado:
 
 area:
    path: /area
-   controller: App\Controller\AreaController::index   
+   controller: App\Controller\AreaController::index 
+   # methods: [POST]  
 
 # Rutas para el controlador: Puesto #
 

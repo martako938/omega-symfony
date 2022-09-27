@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Puestos
+ * Puesto
  *
  * @ORM\Table(name="puestos", indexes={@ORM\Index(name="fk_puesto_area", columns={"area_id"})})
  * @ORM\Entity

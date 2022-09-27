@@ -5,12 +5,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Pcs
+ * Pc
  *
  * @ORM\Table(name="pcs", indexes={@ORM\Index(name="fk_pc_equipo", columns={"equipo_id"})})
  * @ORM\Entity
  */
-class Pcs
+class Pc
 {
     /**
      * @var int
@@ -64,9 +64,9 @@ class Pcs
     private $descripcion;
 
     /**
-     * @var \Equipos
+     * @var \Equipo
      *
-     * @ORM\ManyToOne(targetEntity="Equipos")
+     * @ORM\ManyToOne(targetEntity="Equipo")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="equipo_id", referencedColumnName="id")
      * })
@@ -150,12 +150,12 @@ class Pcs
         return $this;
     }
 
-    public function getEquipo(): ?Equipos
+    public function getEquipo(): ?Equipo
     {
         return $this->equipo;
     }
 
-    public function setEquipo(?Equipos $equipo): self
+    public function setEquipo(?Equipo $equipo): self
     {
         $this->equipo = $equipo;
 

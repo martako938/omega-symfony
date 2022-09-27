@@ -5,12 +5,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Empleados
+ * Empleado
  *
  * @ORM\Table(name="empleados", indexes={@ORM\Index(name="fk_empleado_sucursal", columns={"sucursal_id"}), @ORM\Index(name="fk_empleado_puesto", columns={"puesto_id"})})
  * @ORM\Entity
  */
-class Empleados
+class Empleado
 {
     /**
      * @var int
@@ -45,7 +45,7 @@ class Empleados
     /**
      * @var \Puestos
      *
-     * @ORM\ManyToOne(targetEntity="Puestos")
+     * @ORM\ManyToOne(targetEntity="Puesto")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="puesto_id", referencedColumnName="id")
      * })
@@ -53,9 +53,9 @@ class Empleados
     private $puesto;
 
     /**
-     * @var \Sucursales
+     * @var \Sucursal
      *
-     * @ORM\ManyToOne(targetEntity="Sucursales")
+     * @ORM\ManyToOne(targetEntity="Sucursal")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="sucursal_id", referencedColumnName="id")
      * })
@@ -103,24 +103,24 @@ class Empleados
         return $this;
     }
 
-    public function getPuesto(): ?Puestos
+    public function getPuesto(): ?Puesto
     {
         return $this->puesto;
     }
 
-    public function setPuesto(?Puestos $puesto): self
+    public function setPuesto(?Puesto $puesto): self
     {
         $this->puesto = $puesto;
 
         return $this;
     }
 
-    public function getSucursal(): ?Sucursales
+    public function getSucursal(): ?Sucursal
     {
         return $this->sucursal;
     }
 
-    public function setSucursal(?Sucursales $sucursal): self
+    public function setSucursal(?Sucursal $sucursal): self
     {
         $this->sucursal = $sucursal;
 

@@ -280,3 +280,21 @@ CREATE TABLE responsivas(
   CONSTRAINT fk_responsiva_equipo FOREIGN KEY(equipo_id) REFERENCES equipos(id)
 ) ENGINE=InnoDB;
 
+-- --------------------------------------------------------
+--
+-- Estructura de tabla para la tabla `usuarios`
+--
+
+CREATE TABLE usuarios(
+  id              int(255) auto_increment not null,
+  empleado_id     int(255) NOT NULL,
+  nombre          varchar(100),
+  email           varchar(100),
+  password        varchar(100),
+  img             varchar(100),
+  rol             varchar(100),
+  google          bit,
+  CONSTRAINT pk_usuarios PRIMARY KEY(id),
+  CONSTRAINT fk_usuario_empleado FOREIGN KEY(empleado_id) REFERENCES empleados(id)
+) ENGINE=InnoDB;
+

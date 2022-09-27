@@ -5,12 +5,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Equipos
+ * Equipo
  *
  * @ORM\Table(name="equipos", indexes={@ORM\Index(name="fk_equipo_empleado", columns={"empleado_id"}), @ORM\Index(name="fk_equipo_factura", columns={"factura_id"})})
  * @ORM\Entity
  */
-class Equipos
+class Equipo
 {
     /**
      * @var int
@@ -50,9 +50,9 @@ class Equipos
     private $descripcion;
 
     /**
-     * @var \Empleados
+     * @var \Empleado
      *
-     * @ORM\ManyToOne(targetEntity="Empleados")
+     * @ORM\ManyToOne(targetEntity="Empleado")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="empleado_id", referencedColumnName="id")
      * })
@@ -60,9 +60,9 @@ class Equipos
     private $empleado;
 
     /**
-     * @var \Facturas
+     * @var \Factura
      *
-     * @ORM\ManyToOne(targetEntity="Facturas")
+     * @ORM\ManyToOne(targetEntity="Factura")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="factura_id", referencedColumnName="id")
      * })
@@ -122,24 +122,24 @@ class Equipos
         return $this;
     }
 
-    public function getEmpleado(): ?Empleados
+    public function getEmpleado(): ?Empleado
     {
         return $this->empleado;
     }
 
-    public function setEmpleado(?Empleados $empleado): self
+    public function setEmpleado(?Empleado $empleado): self
     {
         $this->empleado = $empleado;
 
         return $this;
     }
 
-    public function getFactura(): ?Facturas
+    public function getFactura(): ?Factura
     {
         return $this->factura;
     }
 
-    public function setFactura(?Facturas $factura): self
+    public function setFactura(?Factura $factura): self
     {
         $this->factura = $factura;
 
