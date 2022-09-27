@@ -293,7 +293,6 @@ CREATE TABLE usuarios(
   password        varchar(100),
   img             varchar(100),
   rol             varchar(100),
-  google          bit,
   CONSTRAINT pk_usuarios PRIMARY KEY(id),
   CONSTRAINT fk_usuario_empleado FOREIGN KEY(empleado_id) REFERENCES empleados(id)
 ) ENGINE=InnoDB;
