@@ -5,12 +5,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Usuario
+ * User
  *
  * @ORM\Table(name="usuarios", indexes={@ORM\Index(name="fk_usuario_empleado", columns={"empleado_id"})})
  * @ORM\Entity
  */
-class Usuario
+class User
 {
     /**
      * @var int
@@ -141,6 +141,20 @@ class Usuario
         $this->empleado = $empleado;
 
         return $this;
+    }
+
+    //Para serializar el objeto en json
+    public function jsonSerialize(): array{
+        return[
+            'id' => $this->id,
+            'empleado' => $this->empleado,
+            'nombre' => $this->nombre,
+            'email' => $this->email,
+            'descripcion' => $this->descripcion,
+            'password' => $this->password,
+            'img' => $this->img,
+            'rol' => $this->rol,
+        ];
     }
 
 
