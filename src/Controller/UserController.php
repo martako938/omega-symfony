@@ -4,13 +4,13 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
-use Doctrine\Persistence\ManagerRegistry;
-use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Constraints\Email;
+use Doctrine\Persistence\ManagerRegistry;
 
+use App\Entity\User;
+use App\Services\JwtAuth;
 // use App\Entity\Empleado;
 
 
@@ -34,8 +34,7 @@ class UserController extends AbstractController{
         return $response;
     }
 
-    public function index( ManagerRegistry $doctrine ): JsonResponse
-    {
+    public function index( ManagerRegistry $doctrine ): JsonResponse{
         //A partir de Symfony 5
         $entityManager = $doctrine->getManager();
 
@@ -49,14 +48,14 @@ class UserController extends AbstractController{
         return $this->resjson($users);
     }
 
-    //Para crear un usuario POST
+    // Para crear un usuario POST
     public function create(Request $request, ManagerRegistry $doctrine){
         //Recoger los datos por post
         $json = $request->get('json', null);
 
         // Decodificar el json
         $params = json_decode($json);
-        //Antes se necesitab agregar true si no tivieramos jresponce ne la cabecera
+        //Antes se necesitab agregar true si no tivieramos jresponse ne la cabecera
         //$params = json_decode($json, true);
 
         // Respuesta por defecto
@@ -123,10 +122,95 @@ class UserController extends AbstractController{
             }
 
         }
-
         // Hacer respuesta en json 
         return $this->resjson($data);
+    }
 
+    // Para hacer Login. Se enyecta el servicio ya importado JwtAuth $jwt_auth
+    public function login(Request $request, JwtAuth $jwt_auth){
+
+        // Recibir los datos en post
+        $json = $request->get('json', null);
+
+        // Decodificar el json
+        $params = json_decode($json);
+
+        // Array respuesta por defecto
+        
+        $data = [
+            'status' => 'error',
+            'code' => 200,
+            'msg' => 'El usuario no se ha podido identificar',
+        ];
+
+        // Comprobar y validar los datos
+        if ($json != null) {
+            
+            $email = (!empty($params->email)) ? $params->email : null;
+            $password = (!empty($params->password)) ? $params->password : null;
+            $gettoken = (!empty($params->gettoken)) ? $params->gettoken : null;
+
+            //clase validator importada de symfony
+            $validator = Validation::createValidator();
+            $validate_email = $validator->validate($email, [
+                new Email()
+            ]);
+
+            if ( !empty($email) && !empty($password) && count($validate_email) == 0 ) {
+                
+                // Cifrar contraseña
+                $pwd = hash('sha256', $password);
+
+                // Si es valido llamar un servicio para identificar al usuaria  (jwt, token o un objeto)
+                  if ($gettoken) {
+                    $signup = $jwt_auth->signup($email, $pwd, $gettoken);
+                  }else {
+                    $signup = $jwt_auth->signup($email, $pwd);
+                  } 
+                  return new JsonResponse($signup);
+            }
+        } 
+        // Si devuelve bien los datos, respuesta
+        return $this->resjson($data);
+    }
+
+    public function edit(Request $request,JwtAuth $jwt_auth){
+
+        // Recoger la cabecera de autenticacion
+        $token = $request->headers->get('Authorization');
+
+        // Crear un metodo para comprobar si el token es correcto
+        $authCheck = $jwt_auth->checkToken($token);
+
+        //Si es correcto, hacer la actualizacion del usuario
+        if ($authCheck) {
+            // Actualizar al usuario
+
+            // Conseguir entity manager
+
+            // Conseguir los datos del usuario identificado
+
+            // Conseguir el usuario actualizar completo
+
+            // Recoger datos por post
+
+            // Comprobar y validar los datos
+
+            // Asignar los nuevos datos del objeto al usuario
+
+            // Comprobar duplicados
+
+            // Guardar cambios en la base de datos
+        }
+        // Array respuesta por defecto
+        $data = [
+            'status' => 'error',
+            'msg' => 'Metodo update del controlador usuarios',
+            'token' => $token,
+            'authCheck' => $authCheck
+        ];
+
+        return $this->resjson($data);
     }
 
 }
