@@ -11,7 +11,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 use App\Entity\User;
 use App\Services\JwtAuth;
-// use App\Entity\Empleado;
 
 
 class UserController extends AbstractController{
@@ -174,41 +173,88 @@ class UserController extends AbstractController{
         return $this->resjson($data);
     }
 
-    public function edit(Request $request,JwtAuth $jwt_auth){
+    public function edit(Request $request, JwtAuth $jwt_auth, ManagerRegistry $doctrine){
 
         // Recoger la cabecera de autenticacion
         $token = $request->headers->get('Authorization');
 
         // Crear un metodo para comprobar si el token es correcto
         $authCheck = $jwt_auth->checkToken($token);
+        
+        // Array respuesta por defecto
+        $data = [
+            'status' => 'error',
+            'code' => 400,
+            'msg' => 'Usuario NO ACTUALIZADO',
+        ];
 
         //Si es correcto, hacer la actualizacion del usuario
         if ($authCheck) {
             // Actualizar al usuario
 
             // Conseguir entity manager
+             // $em = $this->getDoctrine()->getManager();
+             $em = $doctrine->getManager();
 
             // Conseguir los datos del usuario identificado
+            $identity = $jwt_auth->checkToken($token, true);
 
             // Conseguir el usuario actualizar completo
+            $user_repo = $em->getRepository(User::class);
+            $user = $user_repo->findOneBy([
+                'id' => $identity->sub
+            ]);
 
             // Recoger datos por post
+            $json = $request->get('json', null);
+            $params = json_decode($json);
 
             // Comprobar y validar los datos
+            if (!empty($json)) {
 
-            // Asignar los nuevos datos del objeto al usuario
+                $nombre = (!empty($params->nombre)) ? $params->nombre : null;
+                $email = (!empty($params->email)) ? $params->email : null;
 
-            // Comprobar duplicados
+                //clase validator importada de symfony
+                $validator = Validation::createValidator();
+                $validate_email = $validator->validate($email, [
+                    new Email()
+                ]);
 
-            // Guardar cambios en la base de datos
+                if( !empty($email) && count($validate_email)==0 && !empty($nombre) ){
+                    // Asignar los nuevos datos del objeto al usuario
+                    $user->setEmail($email);
+                    $user->setNombre($nombre);
+
+                    // Comprobar duplicados
+                    $isset_user = $user_repo->findBy([
+                        'email' => $email
+                    ]);
+
+                    if (count($isset_user) == 0 || $identity->email == $email) {
+                        // Guardar cambios en la base de datos
+                        $em->persist($user);
+                        $em->flush();
+                        
+                        $data = [
+                            'status' => 'success',
+                            'code' => 200,
+                            'msg' => 'Usuario actualizado',
+                            'user'=> $user
+                        ];
+
+                    }else{
+                        $data = [
+                            'status' => 'error',
+                            'code' => 400,
+                            'msg' => 'No puedes usar ese email',
+                        ];    
+                    }
+                }
+            }
+
+            
         }
-        // Array respuesta por defecto
-        $data = [
-            'status' => 'error',
-            'msg' => 'Metodo update del controlador usuarios',
-            'token' => $token,
-            'authCheck' => $authCheck
-        ];
 
         return $this->resjson($data);
     }

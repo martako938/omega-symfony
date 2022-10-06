@@ -147,7 +147,7 @@ class User
     public function jsonSerialize(): array{
         return[
             'id' => $this->id,
-            'empleado' => $this->empleado,
+            //'empleado' => $this->empleado,
             'nombre' => $this->nombre,
             'email' => $this->email,
             'descripcion' => $this->descripcion,
