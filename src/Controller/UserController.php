@@ -202,7 +202,7 @@ class UserController extends AbstractController{
             // Conseguir el usuario actualizar completo
             $user_repo = $em->getRepository(User::class);
             $user = $user_repo->findOneBy([
-                'id' => $identity->sub
+                'id' => $identity->sub //Aqui obtenemos el id del usuario que llega
             ]);
 
             // Recoger datos por post
